@@ -1,0 +1,28 @@
+# Input file       Model name in paper
+e_120_120.prm     ellipse 120
+e_150_150.prm     ellipse 150
+e_160_120.prm     ellipse 160,120
+e_30_30.prm     ellipse 30
+e_60_60.prm     ellipse 60
+ref.prm     ellipse 90
+
+c_120_120.prm     circle 120
+c_60_60.prm     circle 60
+c_90_90.prm     circle 90
+csmall_90_90.prm     small circle 90
+
+small_rift.prm     small LAB seed
+thick_rift.prm     thick LAB seed
+thin_rift.prm     thin LAB seed
+wide_rift.prm     wide LAB seed
+
+craton.prm     craton 140 km thick
+craton_160.prm      craton 160 km thick
+craton_180.prm      craton 180 km thick
+
+real.prm     EARS
+real_Anza.prm     Anza
+real_GPSvel.prm     N-S vel. decrease
+real_GPSvel_craton.prm      N-S vel. decrease craton
+real_GPSvel_craton_Anza.prm     N-S vel. decrease craton Anza
+real_craton.prm     craton
