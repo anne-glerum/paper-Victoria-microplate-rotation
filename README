@@ -1,0 +1,38 @@
+This repository belongs to the paper
+
+Glerum et al. (in review) Why does Victoria rotate? Continental microplate dynamics in numerical models of the East African Rift System.
+
+and contains the input files (prms) to the ASPECT code used to compute the model results in the paper.
+
+The input files correspond to the ASPECT branch paper-Victoria-microplate-rotation that can be found at
+
+https://github.com/anne-glerum/aspect/tree/paper-Victoria-microplate-rotation
+
+This branch stems from 2.0.0-pre commit 31a88da and includes changes to a.o. the files:
+
+include/aspect/particle/particle_handler.h
+include/aspect/postprocess/point_values.h
+include/aspect/simulator_access.h
+source/particle/particle_handler.cc
+source/particle/world.cc
+source/postprocess/point_values.cc
+source/simulator/core.cc
+source/simulator/simulator_access.cc
+
+It also includes custom plugins needed for model setup and postprocessing:
+
+include/aspect/geometry_model/initial_topography_model/lithosphere_rift.h
+include/aspect/initial_composition/lithosphere_rift.h
+include/aspect/initial_temperature/lithosphere_rift.h
+include/aspect/material_model/visco_plastic_strain.h
+include/aspect/mesh_refinement/lithosphere_rift.h
+include/aspect/postprocess/visualization/stress_regime.h
+source/geometry_model/initial_topography_model/lithosphere_rift.cc
+source/initial_composition/lithosphere_rift.cc
+source/initial_temperature/lithosphere_rift.cc
+source/material_model/visco_plastic_strain.cc
+source/mesh_refinement/lithosphere_rift.cc
+source/postprocess/visualization/stress_regime.cc
+
+The file prms/README_prms_to_paper_model_names contains a table linking
+prm file names to the model names in the paper. 
