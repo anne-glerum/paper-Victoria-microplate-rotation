@@ -1,5 +1,3 @@
-set Additional shared libraries            = /gfs1/work/bbpanneg/software/aspect/aspect/lib_plastic_strain/build_release/libplasticstrain.so, /gfs1/work/bbpanneg/software/aspect/aspect/lib_initial_strain/build_release/libinitstrain.so
-
 set Dimension                              = 3
 
 set Use years in output instead of seconds = true
