@@ -6,10 +6,11 @@ and contains the input files (.prm) to the ASPECT code used to compute the model
 
 The input files correspond to the ASPECT branch paper-Victoria-microplate-rotation that can be found at
 
-https://github.com/anne-glerum/aspect/tree/paper-Victoria-microplate-rotation
+`https://github.com/anne-glerum/aspect/tree/paper-Victoria-microplate-rotation` 
 
-This branch stems from 2.0.0-pre commit 31a88da and includes changes to a.o. the files:
+This branch stems from 2.0.0-pre commit `31a88da` and includes changes to a.o. the files:
 
+```
 include/aspect/particle/particle_handler.h
 include/aspect/postprocess/point_values.h
 include/aspect/simulator_access.h
@@ -18,9 +19,11 @@ source/particle/world.cc
 source/postprocess/point_values.cc
 source/simulator/core.cc
 source/simulator/simulator_access.cc
+```
 
 It also includes custom plugins needed for model setup and postprocessing:
 
+```
 include/aspect/geometry_model/initial_topography_model/lithosphere_rift.h
 include/aspect/initial_composition/lithosphere_rift.h
 include/aspect/initial_temperature/lithosphere_rift.h
@@ -33,16 +36,18 @@ source/initial_temperature/lithosphere_rift.cc
 source/material_model/visco_plastic_strain.cc
 source/mesh_refinement/lithosphere_rift.cc
 source/postprocess/visualization/stress_regime.cc
+```
 
-The file prms/README_prms_to_paper_model_names contains a table linking
+The file `prms/README_prms_to_paper_model_names` contains a table linking
 prm file names to the model names in the paper. 
 
------------------------------------------
-1-2) System requirements and installation
------------------------------------------
+# Documentation
+
+## System requirements and installation
 
 ASPECT was built using the underlying library deal.II 8.5.0 
 on the German HLRN cluster Konrad with the following specifications:
+```
 ###
 #
 #  ASPECT configuration:
@@ -70,9 +75,10 @@ on the German HLRN cluster Konrad with the following specifications:
 #        COMPILE_FLAGS:             -pedantic -fPIC -Wall -Wextra -Wpointer-arith -Wwrite-strings -Wsynth -Wsign-compare -Wswitch -Woverloaded-virtual -Wno-long-long -Wno-placement-new  -Wno-literal-suffix -fopenmp-simd -std=c++14 -Wno-parentheses -Wno-unused-local-typedefs -O2 -funroll-loops -funroll-all-loops -fstrict-aliasing -Wno-unused-local-typedefs
 #
 ###
+```
 
 deal.II 8.5.0 was built with the following specifications using candi (https://github.com/dealii/candi):
-
+```
 ###
 #
 #  deal.II configuration:
@@ -164,7 +170,7 @@ deal.II 8.5.0 was built with the following specifications using candi (https://g
 #      ( DEAL_II_COMPONENT_PYTHON_BINDINGS = OFF )
 #
 ###
-
+```
 The Konrad cluster (Cray) has been dismantled October 2019. 
 
 ASPECT has been installed and run successfully on local machines and supercomputing clusters alike,
@@ -177,7 +183,7 @@ Virtual machines and Docker containers can also be downloaded from the ASPECT we
 Typical install time including the underlying libraries will be several hours. An ASPECT only install
 generally takes 30 minutes to an hour. 
 
-3) Demo
+## Demo
 The folder demo contains an input file demo.prm that is a 2D simplification of the 3D models
 used in the paper. It can be run after installing the branch
 https://github.com/anne-glerum/aspect/tree/paper-Victoria-microplate-rotation
