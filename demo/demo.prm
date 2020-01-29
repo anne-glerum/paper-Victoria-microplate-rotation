@@ -1,0 +1,310 @@
+set Dimension                              = 2
+
+set Use years in output instead of seconds = true
+set End time                               = 1e6
+set CFL number                             = 0.25
+set Maximum time step			   = 20e3
+
+set Adiabatic surface temperature          = 1532
+set Pressure normalization                 = no
+set Output directory                       = demo
+
+set Nonlinear solver scheme                = single Advection, iterated Stokes
+set Max nonlinear iterations               = 50 
+set Nonlinear solver tolerance             = 1e-5
+set Max nonlinear iterations in pre-refinement      = 0
+
+subsection Geometry model
+  set Model name = box
+
+  subsection Box
+    set X extent = 2100e3
+    set Y extent = 300e3
+    set X repetitions = 7
+    set Y repetitions = 1
+  end
+
+  subsection Initial topography model
+    set Model name = lithosphere with rift
+  end
+end
+    
+# Take the minimum of the continental geotherm
+# and the adiabat with 'Adiabatic surface temperature'
+subsection Initial temperature model
+  set List of model names = lithosphere with rift, adiabatic
+  set List of model operators = add, minimum
+  subsection Lithosphere with rift
+    set LAB isotherm temperature = 1576.
+    set Surface temperature = 273.
+    # Whether or not to prescribe the LAB depth up to a
+    # certain depth (in area below LAB)
+    # or use adiabat everywhere
+    set Use temperature compensation depth = true
+    set Temperature compensation depth = 120e3
+  end
+  subsection Adiabatic
+    # A reference profile of the compositional fields
+    # where x represents depth
+    # Attention: make sure it is the same as in "subsection Adiabatic conditions model" below
+    subsection Function
+       set Function expression           = 0; \
+                                           if(x<=20e3,1,0); \
+                                           if(x>20e3&x<=35e3,1,0); \
+                                           if(x>35e3&x<=120e3,1,0)
+    end
+    set Age top boundary layer        = 0
+    set Age bottom boundary layer     = 0
+  end
+end
+
+subsection Compositional fields
+  set Number of fields = 4
+  set Names of fields = strain, upper, lower, mantle_L
+end 
+
+subsection Initial composition model
+  set List of model names = lithosphere with rift
+  subsection Lithosphere with rift
+    # In km for cartesian geometries (otherwise radians)
+    # This gives the Gaussian width of the inherited domain
+    # It should be at least two elements wide.
+    set Standard deviation of Gaussian rift geometry = 50e3
+    # (0 = same thicknesses as reference lithosphere,
+    #  >0 = thinner, <0 = thicker, amplitude should lie on [-1,1])
+    # These factors define how much thinner the inherited domain thicknesses are than the undisturbed layer thicknesses (order: upper, lower, mantle litho)
+    # example: 0.25 inherited domain will be 25% thinner that the undisturbed domain
+    set Amplitude of Gaussian rift geometry  = 0, 0, 0.20
+    # Rift axis will lie in the center of the domain
+    set Rift axis line segments =    1050000
+    # Reference thicknesses
+    set Layer thicknesses                                           = 20e3, 15e3, 85e3
+    # A thicker region from x = 1800 to x = 2000 km is prescribed through a polygon 
+    set Lithospheric polygons                                       = 1800000>2000000
+    set Lithospheric polygon layer thicknesses                      = 30e3, 25e3, 105e3
+    set Half width of polygon smoothing                             = 50000
+    set Blend polygons and rifts                                    = true
+  end
+end
+
+subsection Boundary composition model
+  set List of model names = initial composition
+end
+
+subsection Boundary temperature model
+  set List of model names = initial temperature, box
+  set List of model operators = add, minimum
+  subsection Box
+    set Top temperature    =  273
+    set Bottom temperature = 5000 	# Unrealistically high, so that it is always taken from initial temperature plugin
+  end
+end
+
+
+# The parameters below this comment were created by the update script
+# as replacement for the old 'Model settings' subsection. They can be
+# safely merged with any existing subsections with the same name.
+
+subsection Boundary temperature model
+  set Fixed temperature boundary indicators   = bottom, top 
+end
+
+subsection Boundary composition model
+  set Fixed composition boundary indicators   = bottom, top
+end
+
+subsection Boundary velocity model
+  set Prescribed velocity boundary indicators = left x: function, right x: function, bottom z: function
+end
+
+subsection Free surface
+  set Free surface boundary indicators        = top
+end
+
+# Advecting the free surface vertically rather than
+# in the surface normal direction can result in a
+# more stable mesh when the deformation is large
+subsection Free surface
+  set Surface velocity projection = vertical
+  set Free surface stabilization theta                        = 0.5
+  set Additional tangential mesh velocity boundary indicators =  left, right
+end
+
+
+subsection Formulation
+  set Formulation          = custom
+  # incompressible
+  set Mass conservation    = ask material model
+  # use reference density in the temperature equation
+  set Temperature equation = reference density profile
+end
+
+subsection Boundary velocity model
+  subsection Function
+    set Coordinate system   = cartesian
+    set Variable names      = x,y,z
+    set Function constants  = mm=0.001, yr=1, outflow=5, t_depth=300e3, dx=2100e3
+    set Function expression = if(x<dx/2., -outflow/2*mm/yr, outflow/2*mm/yr); \
+                              0; \
+                              (outflow*t_depth)/dx*mm/yr
+  end
+end
+
+subsection Gravity model
+  set Model name = vertical
+
+  subsection Vertical
+    set Magnitude = 9.81
+  end
+end
+
+
+subsection Material model
+  set Model name = visco plastic strain
+
+  subsection Visco Plastic
+
+    # Reference temperature and viscosity
+    set Reference temperature = 293
+    set Reference viscosity = 1e22
+    
+    # The minimum strain-rate helps limit large viscosities values that arise
+    # as the strain-rate approaches zero.
+    # The reference strain-rate is used on the first non-linear iteration
+    # of the first time step when the velocity has not been determined yet. 
+    set Minimum strain rate = 1.e-25
+    set Reference strain rate = 1.e-16
+
+    # Limit the viscosity with minimum and maximum values
+    set Minimum viscosity = 1e18
+    set Maximum viscosity = 1e26
+
+    # Thermal diffusivity is adjusted to match thermal conductivities
+    # assumed in assigning the initial geotherm
+    # order:                           background    ,      strain          ,      upper          ,       lower          ,        mantle_L
+    set Thermal diffusivities = 8.333333333333333e-07, 8.333333333333333e-07, 7.71604938271605e-07, 7.309941520467837e-07, 8.384146341463415e-07
+    set Heat capacities       =       1200.
+    set Densities             =        3300.         ,        3300.         ,        2700.        ,        2850.          ,       3280.
+    set Thermal expansivities =        3.0e-5        ,        3.0e-5        ,        2.7e-5       ,        2.7e-5         ,      3.0e-5
+
+    # Harmonic viscosity averaging
+    set Viscosity averaging scheme = harmonic
+
+    # Choose to have the viscosity (pre-yield) follow a dislocation
+    # diffusion or composite flow law.  Here, dislocation is selected
+    # so no need to specify diffusion creep parameters below, which are
+    # only used if "diffusion" or "composite" option is selected.
+    set Viscous flow law = composite
+
+    # Dislocation creep 
+    set Prefactors for dislocation creep          = 6.52e-16, 6.52e-16, 8.57e-28, 7.13e-18, 6.52e-16
+    set Stress exponents for dislocation creep    =      3.5,      3.5,      4.0,      3.0,      3.5
+    set Activation energies for dislocation creep =   530.e3,   530.e3,   223.e3,   345.e3,   530.e3
+    set Activation volumes for dislocation creep  =   18.e-6,   18.e-6,       0.,   38.e-6,   18.e-6
+    # Diffusion creep
+    set Prefactors for diffusion creep          = 2.25e-9, 2.25e-9, 5.97e-19, 2.99e-25, 2.25e-9
+    set Stress exponents for diffusion creep    =     1.0
+    set Activation energies for diffusion creep =  375.e3,   375.e3,  223.e3,   159.e3,   375.e3
+    set Activation volumes for diffusion creep  =   6.e-6,    6.e-6,      0.,   38.e-6,   6.e-6
+    set Grain size                               = 1e-3
+    set Grain size exponents for diffusion creep = 0., 0., 2, 3, 0
+    # Plasticity parameters
+    set Angles of internal friction =   20.
+    set Cohesions                   = 20.e6
+  
+    # Strain weakening parameters
+    set Use strain weakening = true
+    set Use plastic strain weakening = true
+    set Use viscous strain weakening = false
+    set Start plastic strain weakening intervals = 0.0
+    set End plastic strain weakening intervals = 0.5
+    set Cohesion strain weakening factors =1,1,1,1,1
+    set Friction strain weakening factors = 0.25,0.25,0.25,0.25,0.25
+  end
+end
+
+
+subsection Mesh refinement
+  set Initial global refinement                = 4
+  set Initial adaptive refinement              = 1
+  set Time steps between mesh refinement       = 0
+  set Strategy                                 = minimum refinement function
+  subsection Minimum refinement function
+    set Coordinate system   = depth
+    set Function constants  = Moho=40e3, LAB=160e3
+    set Function expression = if(x<=LAB,5,4)
+  end
+
+end
+
+subsection Heating model
+  set List of model names = compositional heating, adiabatic heating, shear heating
+  subsection Compositional heating
+    set Use compositional field for heat production averaging = 0,1,1,1,1
+    set Compositional heating values = 0,0,1.5e-6, 0.2e-6,0
+  end
+  subsection Adiabatic heating
+    set Use simplified adiabatic heating = false
+  end
+end
+
+subsection Adiabatic conditions model
+  subsection Compute profile
+    set Composition reference profile = function
+    # In terms of depth
+    # Moho depth 35 km, LAB depth 120 km (i.e. max depth in model)
+    # Attention: make sure it is the same as in "subsection Initial temperature model" above
+    set Function expression           = 0; \
+                                        if(x<=20e3,1,0); \
+                                        if(x>20e3&x<=35e3,1,0); \
+                                        if(x>35e3&x<=120e3,1,0)
+  end
+end
+
+subsection Checkpointing
+  set Steps between checkpoint = 50
+end
+
+subsection Solver parameters
+  subsection Stokes solver parameters
+    set Linear solver tolerance = 1e-6
+    set Number of cheap Stokes solver steps = 200
+  end
+end
+
+subsection Postprocess
+  set List of postprocessors = velocity statistics, temperature statistics, heat flux statistics, visualization, mass flux statistics, composition statistics, topography, point values, particles
+  subsection Visualization
+    set Interpolate output = true
+    set List of output variables      = viscosity, heating, adiabat, density, strain rate, named additional outputs, stress, stress regime
+    set Time between graphical output = 0.2e6
+    set Output mesh velocity          = true
+  end
+  subsection Particles
+    set Data output format       = vtu
+    set Number of particles      = 44
+    set Time between data output = 1e6
+    set Data output format       = ascii
+    set List of particle properties = initial position
+    set Particle generator name  = ascii file
+    subsection Generator
+      subsection Ascii file
+        set Data directory = /home/b/bbpanneg/EARS_generic/newref/tracers/
+        set Data file name = tracers_e_180_180.txt
+      end
+    end
+  end
+  subsection Point values
+    set Output sigma_H and stress regime = true
+    set Time between point values output = 1e6
+    # We will evaluate the solution variables and
+    # their derived quantities at 5 points in/around 
+    # the rift axis. 
+    set Evaluation points = \ 
+           900000, 297000; \
+          1000000, 297000; \
+          1050000, 297000; \
+          1100000, 297000; \
+          1150000, 297000; 
+  end
+end
