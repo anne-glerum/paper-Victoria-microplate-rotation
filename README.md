@@ -179,9 +179,9 @@ on both Linux and MacOS operating systems.
 
 ASPECT installation guidelines can be found in the manual: http://www.math.clemson.edu/~heister/manual.pdf
 
-A virtual machine image can also be downloaded from the ASPECT website: https://aspect.geodynamics.org/download.html
+Alternatively, a virtual machine image can be downloaded from the ASPECT website: https://aspect.geodynamics.org/download.html
 
-A Docker container is available on GitHub: https://github.com/geodynamics/aspect/tree/master/docker
+A Docker container is also available by typing after Docker installation: 'docker pull geodynamics/aspect'
 
 Typical install time including the underlying libraries will be several hours. An ASPECT only install
 generally takes 30 minutes to an hour. 
@@ -193,7 +193,8 @@ https://github.com/anne-glerum/aspect/tree/paper-Victoria-microplate-rotation.
 The input file will create a 2D rift centered around the centre X coordinate. The continental
 lithosphere includes a thicker region towards the right boundary. The model should run for
 1 My (model time). At the currently-set low resolution, this will take X minutes for 2 MPI processes.
-For postprocessing, the stress is outputted at 5 locations around the rift axis. 
+For postprocessing, the stress is outputted at 5 locations around the rift axis. The file containing
+this output is called `point_values.txt`.
 
 Furthermore, the CIG ASPECT repository contains a benchmarks and a cookbook folder with input files that cover
 most functionality of ASPECT. Instructions for these models can be found in the manual and the input files themselves.
@@ -204,3 +205,10 @@ The input files (.prm) in this repository can be run with the ASPECT version
 https://github.com/anne-glerum/aspect/tree/paper-Victoria-microplate-rotation
 only, as they contain custom functionalities for the model setup and postprocessing.
 The custom functionalities are documented in the input files. 
+
+ASPECT can be run as:
+> ./aspect input_file_name.prm
+
+or in parallel
+
+> mpirun -np 2 ./aspect input_file_name.prm
