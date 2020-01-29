@@ -1,12 +1,13 @@
+# Why does Victoria rotate?
 This repository belongs to the paper
 
-Glerum et al. (in review) Why does Victoria rotate? Continental microplate dynamics in numerical models of the East African Rift System.
+*Glerum et al. (in review) Why does Victoria rotate? Continental microplate dynamics in numerical models of the East African Rift System.*
 
-and contains the input files (.prm) to the ASPECT code used to compute the model results in the paper.
+and contains the input files (`*.prm`) to the ASPECT code used to compute the model results in the paper.
 
-The input files correspond to the ASPECT branch paper-Victoria-microplate-rotation that can be found at
+The input files correspond to the ASPECT branch `paper-Victoria-microplate-rotation` that can be found at
 
-`https://github.com/anne-glerum/aspect/tree/paper-Victoria-microplate-rotation` 
+https://github.com/anne-glerum/aspect/tree/paper-Victoria-microplate-rotation
 
 This branch stems from 2.0.0-pre commit `31a88da` and includes changes to a.o. the files:
 
@@ -177,8 +178,10 @@ ASPECT has been installed and run successfully on local machines and supercomput
 on both Linux and MacOS operating systems.
 
 ASPECT installation guidelines can be found in the manual: http://www.math.clemson.edu/~heister/manual.pdf
-Virtual machines and Docker containers can also be downloaded from the ASPECT website: https://aspect.geodynamics.org/download.html
 
+A virtual machine image can also be downloaded from the ASPECT website: https://aspect.geodynamics.org/download.html
+
+A Docker container is available on GitHub: https://github.com/geodynamics/aspect/tree/master/docker
 
 Typical install time including the underlying libraries will be several hours. An ASPECT only install
 generally takes 30 minutes to an hour. 
@@ -186,7 +189,7 @@ generally takes 30 minutes to an hour.
 ## Demo
 The folder demo contains an input file demo.prm that is a 2D simplification of the 3D models
 used in the paper. It can be run after installing the branch
-https://github.com/anne-glerum/aspect/tree/paper-Victoria-microplate-rotation
+https://github.com/anne-glerum/aspect/tree/paper-Victoria-microplate-rotation.
 The input file will create a 2D rift centered around the centre X coordinate. The continental
 lithosphere includes a thicker region towards the right boundary. The model should run for
 1 My (model time). At the currently-set low resolution, this will take X minutes for 2 MPI processes.
@@ -196,7 +199,7 @@ Furthermore, the CIG ASPECT repository contains a benchmarks and a cookbook fold
 most functionality of ASPECT. Instructions for these models can be found in the manual and the input files themselves.
 These folders are included in the aforementioned branch.
 
-4) Instructions for use
+## Instructions for use
 The input files (.prm) in this repository can be run with the ASPECT version
 https://github.com/anne-glerum/aspect/tree/paper-Victoria-microplate-rotation
 only, as they contain custom functionalities for the model setup and postprocessing.
