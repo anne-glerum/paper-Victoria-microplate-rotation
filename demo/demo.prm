@@ -81,7 +81,7 @@ subsection Initial composition model
     set Layer thicknesses                                           = 20e3, 15e3, 85e3
     # A thicker region from x = 1800 to x = 2000 km is prescribed through a polygon 
     set Lithospheric polygons                                       = 1800000>2000000
-    set Lithospheric polygon layer thicknesses                      = 30e3, 25e3, 105e3
+    set Lithospheric polygon layer thicknesses                      = 20e3, 15e3, 105e3
     set Half width of polygon smoothing                             = 50000
     set Blend polygons and rifts                                    = true
   end
@@ -114,7 +114,7 @@ subsection Boundary composition model
 end
 
 subsection Boundary velocity model
-  set Prescribed velocity boundary indicators = left x: function, right x: function, bottom z: function
+  set Prescribed velocity boundary indicators = left x: function, right x: function, bottom y: function
 end
 
 subsection Free surface
@@ -145,7 +145,6 @@ subsection Boundary velocity model
     set Variable names      = x,y,z
     set Function constants  = mm=0.001, yr=1, outflow=5, t_depth=300e3, dx=2100e3
     set Function expression = if(x<dx/2., -outflow/2*mm/yr, outflow/2*mm/yr); \
-                              0; \
                               (outflow*t_depth)/dx*mm/yr
   end
 end
@@ -277,26 +276,26 @@ subsection Postprocess
   subsection Visualization
     set Interpolate output = true
     set List of output variables      = viscosity, heating, adiabat, density, strain rate, named additional outputs, stress, stress regime
-    set Time between graphical output = 0.2e6
+    set Time between graphical output = 1e5
     set Output mesh velocity          = true
   end
   subsection Particles
     set Data output format       = vtu
-    set Number of particles      = 44
-    set Time between data output = 1e6
+    set Number of particles      = 8
+    set Time between data output = 1e5
     set Data output format       = ascii
     set List of particle properties = initial position
     set Particle generator name  = ascii file
     subsection Generator
       subsection Ascii file
-        set Data directory = /home/b/bbpanneg/EARS_generic/newref/tracers/
-        set Data file name = tracers_e_180_180.txt
+        set Data directory = tracers/
+        set Data file name = tracers_demo.txt
       end
     end
   end
   subsection Point values
     set Output sigma_H and stress regime = true
-    set Time between point values output = 1e6
+    set Time between point values output = 1e5
     # We will evaluate the solution variables and
     # their derived quantities at 5 points in/around 
     # the rift axis. 

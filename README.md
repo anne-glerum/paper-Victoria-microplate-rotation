@@ -192,13 +192,14 @@ used in the paper. It can be run after installing the branch
 https://github.com/anne-glerum/aspect/tree/paper-Victoria-microplate-rotation.
 The input file will create a 2D rift centered around the centre X coordinate. The continental
 lithosphere includes a thicker region towards the right boundary. The model should run for
-1 My (model time). At the currently-set low resolution, this will take X minutes for 2 MPI processes.
+1 My (model time). At the currently-set low resolution, this will take ~9 minutes for 2 MPI processes.
+Make sure the correct absolute path to the file tracers/tracers_demo.txt is set in the input file.
 For postprocessing, the stress is outputted at 5 locations around the rift axis. The file containing
 this output is called `point_values.txt`.
 
 Furthermore, the CIG ASPECT repository contains a benchmarks and a cookbook folder with input files that cover
 most functionality of ASPECT. Instructions for these models can be found in the manual and the input files themselves.
-These folders are included in the aforementioned branch.
+These folders are also included in the aforementioned branch.
 
 ## Instructions for use
 The input files (.prm) in this repository can be run with the ASPECT version
