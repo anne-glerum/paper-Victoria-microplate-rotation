@@ -9,7 +9,7 @@ The input files correspond to the ASPECT branch `paper-Victoria-microplate-rotat
 
 https://github.com/anne-glerum/aspect/tree/paper-Victoria-microplate-rotation
 
-This branch stems from 2.0.0-pre commit `31a88da` and includes changes to a.o. the files:
+This branch stems from 2.1.0-pre commit `31a88da` and includes changes to a.o. the files:
 
 ```
 include/aspect/particle/particle_handler.h
